@@ -235,6 +235,82 @@ section{
 
 /* ── CONTACT ── */
 #contact{text-align:center;padding-bottom:8rem}
+.contact-form{
+  margin:2rem auto 0;
+  max-width:680px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1.25rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+.contact-field{
+  text-align:left;
+}
+.contact-field.full{
+  grid-column:1 / -1;
+}
+.contact-field label{
+  display:block;
+  font-size:.65rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.5rem;
+}
+.contact-field input,
+.contact-field textarea{
+  width:100%;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  color:var(--text);
+  border-radius:2px;
+  padding:.7rem .8rem;
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.contact-field input:focus,
+.contact-field textarea:focus{
+  border-color:rgba(0,212,255,.45);
+  box-shadow:0 0 0 2px rgba(0,212,255,.12);
+}
+.contact-field textarea{
+  min-height:140px;
+  resize:vertical;
+}
+.contact-submit{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:flex-end;
+}
+.contact-submit button{
+  border:1px solid var(--accent);
+  background:rgba(0,212,255,.08);
+  color:var(--accent);
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:700;
+  padding:.7rem 1.2rem;
+  border-radius:2px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.contact-submit button:hover{
+  background:rgba(0,212,255,.16);
+  box-shadow:0 0 16px rgba(0,212,255,.18);
+}
+.contact-note{
+  grid-column:1 / -1;
+  text-align:left;
+  font-size:.65rem;
+  color:var(--muted);
+}
 .contact-links{
   display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.5rem;
 }
@@ -360,6 +436,9 @@ footer{
   .nav-links{gap:1rem}
   section{padding:4rem 1.5rem}
   #hero{padding:5rem 1.5rem 3rem}
+  .contact-form{grid-template-columns:1fr;padding:1rem}
+  .contact-submit{justify-content:stretch}
+  .contact-submit button{width:100%}
   .xp-item{grid-template-columns:1fr;gap:.5rem}
   .project-item{grid-template-columns:1fr}
   footer{flex-direction:column;gap:.5rem;text-align:center}
@@ -646,6 +725,27 @@ footer{
   <p style="color:var(--muted);font-size:.85rem;max-width:480px;margin:0 auto;line-height:1.8">
     Je recherche une alternance dans le domaine Système &amp; Réseau ou Développement — basé à Toulouse, véhiculé et mobile sur le secteur toulousain.
   </p>
+  <form class="contact-form reveal" action="https://formsubmit.co/maxia.blot@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Nouveau message depuis ton GitHub Pages">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="_honey" style="display:none">
+    <div class="contact-field">
+      <label for="contact-name">Nom</label>
+      <input id="contact-name" name="name" type="text" required>
+    </div>
+    <div class="contact-field">
+      <label for="contact-email">Email</label>
+      <input id="contact-email" name="email" type="email" required>
+    </div>
+    <div class="contact-field full">
+      <label for="contact-message">Message</label>
+      <textarea id="contact-message" name="message" required></textarea>
+    </div>
+    <div class="contact-note">Le message sera transmis directement par email.</div>
+    <div class="contact-submit">
+      <button type="submit">Envoyer le message</button>
+    </div>
+  </form>
   <div class="contact-links">
     <a class="contact-link" href="mailto:maxia.blot@gmail.com">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
@@ -685,7 +785,7 @@ document.addEventListener('mousemove',e=>{
   ring.style.left=rx-18+'px';ring.style.top=ry-18+'px';
   requestAnimationFrame(lerp);
 })();
-document.querySelectorAll('a,.skill-card,.project-item,.xp-item').forEach(el=>{
+document.querySelectorAll('a,button,input,textarea,.skill-card,.project-item,.xp-item').forEach(el=>{
   el.addEventListener('mouseenter',()=>{
     ring.style.width='60px';ring.style.height='60px';
     ring.style.left=rx-30+'px';ring.style.top=ry-30+'px';
