@@ -443,6 +443,55 @@ footer{
   .project-item{grid-template-columns:1fr}
   footer{flex-direction:column;gap:.5rem;text-align:center}
 }
+
+/* ── SMASH TRANSITION ── */
+#smash-overlay {
+  position: fixed; inset: 0; z-index: 999999;
+  pointer-events: none; display: flex; justify-content: center; align-items: center;
+  overflow: hidden;
+}
+#smash-rock {
+  font-size: 5rem;
+  position: absolute;
+  transform: scale(0) rotate(0deg);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.5, 0, 1, 1), opacity 0.1s;
+}
+#smash-overlay.is-smashing #smash-rock {
+  transform: scale(20) rotate(180deg);
+  opacity: 1;
+}
+#smash-glass {
+  position: absolute; inset: 0;
+  background: url('assets/shatter.png') center/cover no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: scale(1.1);
+}
+#smash-overlay.is-shattered #smash-glass {
+  opacity: 1;
+}
+#smash-blackout {
+  position: absolute; inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#smash-overlay.is-blackout #smash-blackout {
+  opacity: 1;
+}
+@keyframes screenShake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-10px, -10px) rotate(-1deg); }
+  20% { transform: translate(10px, 10px) rotate(1deg); }
+  30% { transform: translate(-10px, 10px) rotate(0deg); }
+  40% { transform: translate(10px, -10px) rotate(1deg); }
+  50% { transform: translate(-10px, 0) rotate(-1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+body.is-shaking {
+  animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
 </style>
 </head>
 <body>
@@ -936,6 +985,38 @@ function updateStickyVisibility(){
 }
 window.addEventListener('scroll',updateStickyVisibility,{passive:true});
 updateStickyVisibility();
+
+/* ── SMASH TRANSITION LOGIC ── */
+const partyRockLink = document.querySelector('a[href="https://SerMaxia.github.io/Party_Rock"]');
+const smashOverlay = document.getElementById('smash-overlay');
+
+if (partyRockLink && smashOverlay) {
+  partyRockLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const href = partyRockLink.getAttribute('href');
+    
+    smashOverlay.classList.add('is-smashing');
+    
+    setTimeout(() => {
+      smashOverlay.classList.add('is-shattered');
+      document.body.classList.add('is-shaking');
+      document.getElementById('smash-rock').style.display = 'none';
+      
+      setTimeout(() => {
+        smashOverlay.classList.add('is-blackout');
+        setTimeout(() => { window.location.href = href; }, 400);
+      }, 600);
+    }, 400);
+  });
+}
 </script>
+
+<!-- SMASH TRANSITION OVERLAY -->
+<div id="smash-overlay">
+  <div id="smash-rock">🪨</div>
+  <div id="smash-glass"></div>
+  <div id="smash-blackout"></div>
+</div>
+
 </body>
 </html>
