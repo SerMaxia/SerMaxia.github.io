@@ -1,23 +1,35 @@
-﻿(function () {
-	const root = document.documentElement;
-	const btn = document.getElementById('themeToggle');
-	const key = 'theme-preference';
+document.addEventListener('DOMContentLoaded', () => {
+    // Current year for footer
+    const yearSpan = document.getElementById('current-year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
 
-	function setTheme(mode) {
-		if (mode === 'light') root.classList.add('light');
-		else root.classList.remove('light');
-		localStorage.setItem(key, mode);
-		btn.textContent = mode === 'light' ? 'Light' : 'Dark';
-	}
+    // Scroll reveal animation
+    const reveals = document.querySelectorAll('.reveal');
 
-	const stored = localStorage.getItem(key);
-	const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-	setTheme(stored || (prefersLight ? 'light' : 'dark'));
+    const revealOnScroll = () => {
+        const windowHeight = window.innerHeight;
+        const elementVisible = 100;
 
-	btn.addEventListener('click', function () {
-		const next = root.classList.contains('light') ? 'dark' : 'light';
-		setTheme(next);
-	});
+        reveals.forEach((reveal) => {
+            const elementTop = reveal.getBoundingClientRect().top;
+            if (elementTop < windowHeight - elementVisible) {
+                reveal.classList.add('visible');
+            }
+        });
+    };
 
-	document.getElementById('year').textContent = new Date().getFullYear().toString();
-})();
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll(); // Trigger once on load
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+});
