@@ -1,178 +1,1054 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio de Mathéo Cluts-Blot, Développeur Junior Full Stack. Découvrez mes projets, notamment S0LST1CE.">
-    <title>Mathéo Cluts-Blot | Développeur Junior Full Stack</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Math&#233;o Cluts-Blot &#8212; Sys &amp; Dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c10;
+  --surface:#0d1117;
+  --card:#111820;
+  --border:#1e2d3d;
+  --accent:#00d4ff;
+  --accent2:#ff2d6b;
+  --accent3:#39ff7a;
+  --text:#e8f0f8;
+  --muted:#5a7a9a;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-mono:'Space Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-mono);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* -- CURSOR -- */
+#cursor{
+  position:fixed;width:12px;height:12px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  transition:transform .1s,opacity .2s;
+  mix-blend-mode:screen;
+}
+#cursor-ring{
+  position:fixed;width:36px;height:36px;
+  border:1px solid var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9998;
+  transition:transform .25s cubic-bezier(.23,1,.32,1),width .2s,height .2s;
+  mix-blend-mode:screen;opacity:.5;
+}
+
+/* -- CANVAS BG -- */
+#bg-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;opacity:.6;
+}
+
+/* -- NAV -- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 3rem;
+  background:rgba(8,12,16,.85);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:var(--font-display);font-weight:800;font-size:1.1rem;
+  color:var(--accent);letter-spacing:.05em;
+}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{
+  color:var(--muted);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;
+  text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--accent)}
+
+/* -- HERO -- */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;display:flex;align-items:center;
+  padding:6rem 3rem 3rem;
+}
+.hero-inner{max-width:900px}
+.hero-tag{
+  display:inline-block;
+  font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--accent);border:1px solid var(--accent);
+  padding:.3rem .8rem;border-radius:2px;margin-bottom:2rem;
+  animation:fadeUp .6s ease both;
+}
+.hero-name{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(3rem,9vw,7rem);line-height:.95;
+  color:#fff;margin-bottom:1.5rem;
+  animation:fadeUp .6s .1s ease both;
+}
+.hero-name span{
+  -webkit-text-stroke:1px var(--accent);color:transparent;
+}
+.hero-sub{
+  font-size:.95rem;color:var(--muted);max-width:560px;
+  line-height:1.8;margin-bottom:2.5rem;
+  animation:fadeUp .6s .2s ease both;
+}
+.hero-badges{
+  display:flex;flex-wrap:wrap;gap:.75rem;
+  animation:fadeUp .6s .3s ease both;
+}
+.badge{
+  font-size:.7rem;letter-spacing:.1em;padding:.4rem 1rem;
+  border-radius:2px;text-transform:uppercase;font-weight:700;
+}
+.badge-sys{background:rgba(0,212,255,.1);color:var(--accent);border:1px solid rgba(0,212,255,.3)}
+.badge-dev{background:rgba(255,45,107,.1);color:var(--accent2);border:1px solid rgba(255,45,107,.3)}
+.badge-lang{background:rgba(57,255,122,.1);color:var(--accent3);border:1px solid rgba(57,255,122,.3)}
+
+.scroll-hint{
+  position:absolute;bottom:2.5rem;left:3rem;
+  font-size:.65rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;
+  display:flex;align-items:center;gap:.75rem;animation:fadeUp .6s .5s ease both;
+}
+.scroll-hint::before{
+  content:'';display:block;width:40px;height:1px;background:var(--muted);
+  animation:lineGrow 1s 1s ease both;transform-origin:left;
+}
+
+/* -- SECTION BASE -- */
+section{
+  position:relative;z-index:1;
+  padding:6rem 3rem;max-width:1100px;margin:0 auto;
+}
+.section-label{
+  font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;
+}
+.section-label::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+.section-title{
+  font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.8rem,4vw,3rem);margin-bottom:3rem;color:#fff;
+}
+
+/* -- SKILLS 3D CARDS -- */
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;
+}
+.skill-card{
+  background:var(--card);border:1px solid var(--border);border-radius:4px;
+  padding:1.75rem;
+  transition:border-color .3s,transform .3s,box-shadow .3s;
+  transform-style:preserve-3d;cursor:default;
+  position:relative;overflow:hidden;
+}
+.skill-card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:radial-gradient(ellipse at var(--mx,50%) var(--my,50%),rgba(0,212,255,.08) 0%,transparent 70%);
+  transition:opacity .3s;pointer-events:none;
+}
+.skill-card:hover::before{opacity:1}
+.skill-card:hover{
+  border-color:rgba(0,212,255,.4);
+  box-shadow:0 0 30px rgba(0,212,255,.08);
+}
+.skill-icon{
+  width:36px;height:36px;margin-bottom:1rem;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;
+}
+.skill-cat{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.4rem;
+}
+.skill-name{
+  font-family:var(--font-display);font-weight:700;font-size:1rem;
+  color:#fff;margin-bottom:1rem;
+}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.skill-tag{
+  font-size:.6rem;padding:.2rem .5rem;border-radius:2px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted);
+}
+
+/* -- PROJECTS -- */
+.projects-list{display:flex;flex-direction:column;gap:1.5rem}
+.project-item{
+  background:var(--card);border:1px solid var(--border);border-radius:4px;
+  padding:2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;
+  align-items:start;transition:border-color .3s,transform .3s;
+  position:relative;overflow:hidden;
+}
+.project-item::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--accent2);opacity:0;transition:opacity .3s;
+}
+.project-item:hover{
+  border-color:rgba(255,45,107,.3);
+  transform:translateX(4px);
+}
+.project-item:hover::after{opacity:1}
+.project-title{
+  font-family:var(--font-display);font-weight:700;font-size:1.1rem;
+  color:#fff;margin-bottom:.5rem;
+}
+.project-desc{font-size:.8rem;color:var(--muted);line-height:1.7;margin-bottom:1rem}
+.project-stack{display:flex;flex-wrap:wrap;gap:.4rem}
+.stack-tag{
+  font-size:.6rem;padding:.2rem .5rem;border-radius:2px;
+  background:rgba(255,45,107,.08);border:1px solid rgba(255,45,107,.2);
+  color:var(--accent2);
+}
+.project-year{
+  font-size:.7rem;color:var(--muted);white-space:nowrap;padding-top:.2rem;
+}
+
+/* -- XP -- */
+.xp-list{display:flex;flex-direction:column;gap:0}
+.xp-item{
+  display:grid;grid-template-columns:140px 1fr;gap:2rem;
+  padding:2rem 0;border-bottom:1px solid var(--border);
+  position:relative;
+}
+.xp-item:last-child{border-bottom:none}
+.xp-date{font-size:.7rem;color:var(--muted);padding-top:.2rem;line-height:1.6}
+.xp-role{
+  font-family:var(--font-display);font-weight:700;font-size:1rem;
+  color:#fff;margin-bottom:.25rem;
+}
+.xp-company{font-size:.75rem;color:var(--accent);margin-bottom:.75rem}
+.xp-tasks{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.xp-tasks li{
+  font-size:.78rem;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6;
+}
+.xp-tasks li::before{
+  content:'>';position:absolute;left:0;color:var(--accent3);font-size:.7rem;
+}
+
+/* -- CONTACT -- */
+#contact{text-align:center;padding-bottom:8rem}
+.contact-form{
+  margin:2rem auto 0;
+  max-width:680px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1.25rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;
+}
+.contact-field{
+  text-align:left;
+}
+.contact-field.full{
+  grid-column:1 / -1;
+}
+.contact-field label{
+  display:block;
+  font-size:.65rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:.5rem;
+}
+.contact-field input,
+.contact-field textarea{
+  width:100%;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.02);
+  color:var(--text);
+  border-radius:2px;
+  padding:.7rem .8rem;
+  font-family:var(--font-mono);
+  font-size:.78rem;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.contact-field input:focus,
+.contact-field textarea:focus{
+  border-color:rgba(0,212,255,.45);
+  box-shadow:0 0 0 2px rgba(0,212,255,.12);
+}
+.contact-field textarea{
+  min-height:140px;
+  resize:vertical;
+}
+.contact-submit{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:flex-end;
+}
+.contact-submit button{
+  border:1px solid var(--accent);
+  background:rgba(0,212,255,.08);
+  color:var(--accent);
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:700;
+  padding:.7rem 1.2rem;
+  border-radius:2px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.contact-submit button:hover{
+  background:rgba(0,212,255,.16);
+  box-shadow:0 0 16px rgba(0,212,255,.18);
+}
+.contact-note{
+  grid-column:1 / -1;
+  text-align:left;
+  font-size:.65rem;
+  color:var(--muted);
+}
+.contact-links{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.5rem;
+}
+.contact-link{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.75rem 1.5rem;border:1px solid var(--border);border-radius:2px;
+  color:var(--muted);text-decoration:none;font-size:.75rem;
+  transition:all .2s;background:var(--card);
+}
+.contact-link:hover{
+  color:var(--accent);border-color:var(--accent);
+  box-shadow:0 0 16px rgba(0,212,255,.12);
+}
+
+/* -- FOOTER -- */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--border);
+  padding:1.5rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:.65rem;color:var(--muted);letter-spacing:.08em;
+}
+
+/* -- ANIMATIONS -- */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes lineGrow{
+  from{transform:scaleX(0)}to{transform:scaleX(1)}
+}
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* -- GLITCH -- */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{
+  content:attr(data-text);position:absolute;top:0;left:0;
+  font-family:inherit;font-size:inherit;font-weight:inherit;
+  line-height:inherit;width:100%;
+}
+.glitch::before{
+  color:var(--accent2);clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+  animation:glitch1 4s infinite;
+}
+.glitch::after{
+  color:var(--accent);clip-path:polygon(0 55%,100% 55%,100% 100%,0 100%);
+  animation:glitch2 4s infinite;
+}
+@keyframes glitch1{
+  0%,90%,100%{transform:translate(0);opacity:0}
+  91%{transform:translate(-3px,1px);opacity:.8}
+  93%{transform:translate(3px,-1px);opacity:.8}
+  95%{transform:translate(0);opacity:0}
+}
+@keyframes glitch2{
+  0%,90%,100%{transform:translate(0);opacity:0}
+  92%{transform:translate(3px,2px);opacity:.8}
+  94%{transform:translate(-3px);opacity:.8}
+  96%{transform:translate(0);opacity:0}
+}
+
+/* -- STICKY NOTE -- */
+#sticky{
+  position:fixed;bottom:1.6rem;right:1.6rem;z-index:200;
+  background:#1c1a0e;border:1px solid #3a3210;
+  border-radius:2px 2px 2px 14px;
+  padding:.9rem 1.1rem 1rem;
+  width:170px;
+  box-shadow:4px 4px 18px rgba(0,0,0,.5),0 0 0 1px rgba(255,220,80,.06);
+  transform:rotate(1.8deg);
+  transition:transform .3s cubic-bezier(.23,1,.32,1),opacity .3s,box-shadow .3s;
+  opacity:.72;
+  font-family:var(--font-mono);
+}
+#sticky.is-hidden{
+  opacity:0;
+  transform:translateY(14px) rotate(1.8deg);
+  pointer-events:none;
+}
+#sticky.is-visible{
+  opacity:.72;
+  transform:rotate(1.8deg);
+  pointer-events:auto;
+}
+#sticky::before{
+  content:'';position:absolute;top:0;right:0;
+  border-width:0 14px 14px 0;border-style:solid;
+  border-color:var(--bg) var(--bg) #3a3210 var(--bg);
+  border-radius:0 2px 0 0;
+}
+#sticky:hover{
+  transform:rotate(0deg) scale(1.04);
+  opacity:1;box-shadow:6px 6px 28px rgba(0,0,0,.6),0 0 0 1px rgba(255,220,80,.15);
+}
+.sticky-pin{
+  position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+  width:10px;height:10px;background:#cc3333;border-radius:50%;
+  box-shadow:0 2px 6px rgba(0,0,0,.5);
+}
+.sticky-name{
+  font-size:.7rem;font-weight:700;color:#f0d060;letter-spacing:.04em;
+  margin-bottom:.25rem;line-height:1.3;
+}
+.sticky-sub{
+  font-size:.6rem;color:#8a7a40;margin-bottom:.75rem;line-height:1.4;
+}
+.sticky-cta{
+  display:block;text-align:center;
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#1c1a0e;background:#f0d060;
+  padding:.3rem .5rem;border-radius:1px;
+  text-decoration:none;font-weight:700;
+  transition:background .2s;
+}
+.sticky-cta:hover{background:#fff07a}
+
+@media(max-width:700px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{gap:1rem}
+  section{padding:4rem 1.5rem}
+  #hero{padding:5rem 1.5rem 3rem}
+  .contact-form{grid-template-columns:1fr;padding:1rem}
+  .contact-submit{justify-content:stretch}
+  .contact-submit button{width:100%}
+  .xp-item{grid-template-columns:1fr;gap:.5rem}
+  .project-item{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:.5rem;text-align:center}
+}
+
+/* -- SMASH TRANSITION -- */
+#smash-overlay {
+  position: fixed; inset: 0; z-index: 999999;
+  pointer-events: none; display: flex; justify-content: center; align-items: center;
+  overflow: hidden;
+}
+#smash-rock {
+  font-size: 5rem;
+  position: absolute;
+  transform: scale(0) rotate(0deg);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.5, 0, 1, 1), opacity 0.1s;
+}
+#smash-overlay.is-smashing #smash-rock {
+  transform: scale(20) rotate(180deg);
+  opacity: 1;
+}
+#smash-glass {
+  position: absolute; inset: 0;
+  background: url('assets/shatter.png') center/cover no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transform: scale(1.1);
+}
+#smash-overlay.is-shattered #smash-glass {
+  opacity: 1;
+}
+#smash-blackout {
+  position: absolute; inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#smash-overlay.is-blackout #smash-blackout {
+  opacity: 1;
+}
+@keyframes screenShake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-10px, -10px) rotate(-1deg); }
+  20% { transform: translate(10px, 10px) rotate(1deg); }
+  30% { transform: translate(-10px, 10px) rotate(0deg); }
+  40% { transform: translate(10px, -10px) rotate(1deg); }
+  50% { transform: translate(-10px, 0) rotate(-1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+body.is-shaking {
+  animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+</style>
 </head>
 <body>
-    <div class="bg-glow bg-glow-1"></div>
-    <div class="bg-glow bg-glow-2"></div>
 
-    <header class="navbar">
-        <div class="container nav-content">
-            <a href="#" class="logo">MCB.</a>
-            <nav class="nav-links">
-                <a href="#about">À propos</a>
-                <a href="#skills">Compétences</a>
-                <a href="#projects">Projets</a>
-                <a href="#experience">Expérience</a>
-                <a href="#contact" class="btn btn-primary">Me contacter</a>
-            </nav>
+<!-- STICKY NOTE -->
+<div id="sticky" class="is-hidden">
+  <div class="sticky-pin"></div>
+  <div class="sticky-name">Math&#233;o<br>Cluts-Blot</div>
+  <div class="sticky-sub">Sys &amp; R&#233;seau / Dev<br>Toulouse / Alternance</div>
+  <a class="sticky-cta" href="mailto:maxia.blot@gmail.com">Me contacter</a>
+</div>
+
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">MCB<span style="color:var(--muted)">_</span></div>
+  <div class="nav-links">
+    <a href="#skills">Comp&#233;tences</a>
+    <a href="#projects">Projets</a>
+    <a href="#experience">Exp&#233;rience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" style="padding-top:6rem;max-width:none">
+  <div class="hero-inner">
+    <div class="hero-tag">Disponible en alternance / Toulouse</div>
+    <h1 class="hero-name">
+      <span class="glitch" data-text="Math&#233;o">Math&#233;o</span><br>Cluts-Blot
+    </h1>
+    <p class="hero-sub">
+      Technicien Syst&#232;me &amp; R&#233;seau / D&#233;veloppeur Fullstack<br>
+      Bachelor SN @ EPSI Toulouse &#8212; passionn&#233; d'infra, de code et de tout ce qui clignote.
+    </p>
+    <div class="hero-badges">
+      <span class="badge badge-sys">Sys &amp; R&#233;seau</span>
+      <span class="badge badge-dev">Fullstack Dev</span>
+      <span class="badge badge-lang">TypeScript / Python / Bash</span>
+      <span class="badge badge-sys">Linux / Windows Server</span>
+      <span class="badge badge-lang">Anglais C1</span>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll pour explorer</div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">01 &#8212; Comp&#233;tences</div>
+  <h2 class="section-title">Stack technique</h2>
+  <div class="skills-grid">
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="skill-cat">Administration Syst&#232;me</div>
+      <div class="skill-name">Windows Server &amp; Linux</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Active Directory</span>
+        <span class="skill-tag">GPO</span>
+        <span class="skill-tag">DNS / DHCP</span>
+        <span class="skill-tag">GLPI</span>
+        <span class="skill-tag">Arch Linux</span>
+        <span class="skill-tag">Bash scripting</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="skill-cat">R&#233;seau &amp; Infrastructure</div>
+      <div class="skill-name">TCP/IP / Firewall / Monitoring</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Architecture TCP/IP</span>
+        <span class="skill-tag">DynFi (firewall)</span>
+        <span class="skill-tag">Grafana</span>
+        <span class="skill-tag">M&#233;thode UMSI</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="skill-cat">S&#233;curit&#233;</div>
+      <div class="skill-name">Supervision &amp; EBIOS</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Formation EBIOS</span>
+        <span class="skill-tag">Monitoring r&#233;seau</span>
+        <span class="skill-tag">Hardening</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div class="skill-cat">D&#233;veloppement Fullstack</div>
+      <div class="skill-name">React / Next.js / Node.js</div>
+      <div class="skill-tags">
+        <span class="skill-tag">TypeScript strict</span>
+        <span class="skill-tag">Next.js 14</span>
+        <span class="skill-tag">App Router</span>
+        <span class="skill-tag">Node.js API</span>
+        <span class="skill-tag">Zod</span>
+        <span class="skill-tag">Tailwind CSS</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
+      <div class="skill-cat">Langages</div>
+      <div class="skill-name">Multi-paradigme</div>
+      <div class="skill-tags">
+        <span class="skill-tag">TypeScript</span>
+        <span class="skill-tag">JavaScript ES6+</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">C#</span>
+        <span class="skill-tag">Bash</span>
+      </div>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div class="skill-cat">Data &amp; Versionning</div>
+      <div class="skill-name">Bases de donn&#233;es / Git</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">Git / GitHub</span>
+        <span class="skill-tag">Pull Requests</span>
+        <span class="skill-tag">Code Review</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">02 &#8212; Projets</div>
+  <h2 class="section-title">R&#233;alisations</h2>
+  <div class="projects-list">
+
+    <!-- S0LST1CE -->
+    <a href="https://github.com/SerMaxia/S0LST1CE" target="_blank" class="project-item reveal" style="text-decoration:none; color:inherit; border-color: rgba(57,255,122,0.3); background: rgba(57,255,122,0.02);">
+      <div>
+        <div class="project-title" style="color: var(--accent3);">S0LST1CE &#8212; IA Locale</div>
+        <div class="project-desc">
+          Interface utilisateur et gestionnaire de sp&#233;cifications (Specs Management) pour interagir localement avec des LLMs (Hermes 2 via Ollama). Conception compl&#232;te de l'UI et de la logique applicative. Int&#233;gration d'un bot LinkedIn pour l'automatisation de la veille.
         </div>
-    </header>
+        <div class="project-stack">
+          <span class="stack-tag" style="border-color: rgba(57,255,122,0.2); color: var(--accent3); background: rgba(57,255,122,0.08);">Ollama</span>
+          <span class="stack-tag" style="border-color: rgba(57,255,122,0.2); color: var(--accent3); background: rgba(57,255,122,0.08);">Hermes 2</span>
+          <span class="stack-tag" style="border-color: rgba(57,255,122,0.2); color: var(--accent3); background: rgba(57,255,122,0.08);">Specs Management</span>
+          <span class="stack-tag" style="border-color: rgba(57,255,122,0.2); color: var(--accent3); background: rgba(57,255,122,0.08);">LinkedIn Bot</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.75rem;">
+        <div class="project-year">2026&#8211;pr&#233;sent</div>
+        <div style="font-size:0.65rem; color:#080c10; background:var(--accent3); padding:0.4rem 0.6rem; border-radius:2px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:0.3rem;">
+          Voir le repo
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+      </div>
+    </a>
 
-    <main>
-        <section id="hero" class="hero container reveal">
-            <div class="hero-content">
-                <p class="subtitle">Développeur Junior Full Stack</p>
-                <h1 class="title">Mathéo <span class="gradient-text">Cluts-Blot</span></h1>
-                <p class="description">
-                    Passionné d'informatique et créateur d'outils performants. Je conçois des applications web modernes, des infrastructures sécurisées et j'intègre des modèles d'intelligence artificielle en local.
-                </p>
-                <div class="hero-actions">
-                    <a href="#projects" class="btn btn-primary">Voir mes projets</a>
-                    <a href="https://github.com/SerMaxia" target="_blank" rel="noopener" class="btn btn-outline">GitHub</a>
-                </div>
-            </div>
-        </section>
+    <!-- Party Rock -->
+    <a href="https://SerMaxia.github.io/Party_Rock" target="_blank" class="project-item reveal" style="text-decoration:none; color:inherit; border-color: rgba(0, 212, 255, 0.3); background: rgba(0, 212, 255, 0.02);">
+      <div>
+        <div class="project-title" style="color: var(--accent);">Party Rock &#8212; Fantasy Bounty Board</div>
+        <div class="project-desc">
+          Application web interactive pour cr&#233;er et g&#233;rer des groupes de personnages fa&#231;on "Bounty Board" de taverne. Fonctionnalit&#233;s de drag-and-drop, animations fluides (destruction par le feu) et design skeuomorphique moderne.
+        </div>
+        <div class="project-stack">
+          <span class="stack-tag" style="border-color: rgba(0, 212, 255, 0.2); color: var(--accent); background: rgba(0, 212, 255, 0.08);">React</span>
+          <span class="stack-tag" style="border-color: rgba(0, 212, 255, 0.2); color: var(--accent); background: rgba(0, 212, 255, 0.08);">Vite</span>
+          <span class="stack-tag" style="border-color: rgba(0, 212, 255, 0.2); color: var(--accent); background: rgba(0, 212, 255, 0.08);">CSS Vanilla</span>
+          <span class="stack-tag" style="border-color: rgba(0, 212, 255, 0.2); color: var(--accent); background: rgba(0, 212, 255, 0.08);">UI/UX</span>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.75rem;">
+        <div class="project-year">2026&#8211;pr&#233;sent</div>
+        <div style="font-size:0.65rem; color:#080c10; background:var(--accent); padding:0.4rem 0.6rem; border-radius:2px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:0.3rem;">
+          Ouvrir l'app
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </div>
+      </div>
+    </a>
 
-        <section id="about" class="about container reveal">
-            <div class="card glass-panel">
-                <h2 class="section-title">À propos de moi</h2>
-                <p>
-                    Je suis qualifié dans l’utilisation d’outils informatiques et en gestion de clientèle. J’apprends vite et j’applique bien.
-                    Passionné de codage et d’informatique en général, je suis en quête de missions stimulantes qui sauront satisfaire ma soif de connaissance.
-                </p>
-            </div>
-        </section>
+    <div class="project-item reveal">
+      <div>
+        <div class="project-title">App SaaS E-Learning</div>
+        <div class="project-desc">
+          Architecture modulaire SPA avec Next.js 14 App Router. Validation stricte des donn&#233;es via sch&#233;mas JSON/Zod.
+          Interface "Seamless UI" avec Tailwind, composants interactifs complexes &#8212; Flashcards 3D, &#233;diteur de texte riche.
+        </div>
+        <div class="project-stack">
+          <span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">Next.js 14</span>
+          <span class="stack-tag">React</span>
+          <span class="stack-tag">Zod</span>
+          <span class="stack-tag">Tailwind CSS</span>
+          <span class="stack-tag">Git</span>
+        </div>
+      </div>
+      <div class="project-year">2024&#8211;2025</div>
+    </div>
 
-        <section id="projects" class="projects container reveal">
-            <h2 class="section-title text-center">Projets Phares</h2>
-            <div class="grid">
-                <!-- S0LST1CE Card -->
-                <article class="card project-card featured-project">
-                    <div class="project-badge">Featured</div>
-                    <h3>S0LST1CE</h3>
-                    <p>
-                        Interface utilisateur et gestionnaire de spécifications (Specs Management) conçu pour interagir localement avec des modèles de langage (LLMs) tels qu'Hermes 2, propulsés par Ollama.
-                    </p>
-                    <ul class="tech-stack">
-                        <li>LLM Local</li>
-                        <li>Ollama</li>
-                        <li>Hermes 2</li>
-                        <li>LinkedIn Bot</li>
-                    </ul>
-                    <a href="https://github.com/SerMaxia/S0LST1CE" target="_blank" rel="noopener" class="btn btn-primary">Voir le code source</a>
-                </article>
+    <div class="project-item reveal">
+      <div>
+        <div class="project-title">Infrastructure personnelle</div>
+        <div class="project-desc">
+          D&#233;ploiement d'un homelab complet : firewall DynFi, monitoring Grafana, dualboot GarudaOS.
+          Auto-h&#233;bergement d'un serveur Minecraft avec tunneling r&#233;seau via playit.gg. Scripts d'archivage Bash pour automatisation des t&#226;ches syst&#232;me.
+        </div>
+        <div class="project-stack">
+          <span class="stack-tag">DynFi</span>
+          <span class="stack-tag">Grafana</span>
+          <span class="stack-tag">Arch Linux</span>
+          <span class="stack-tag">Bash</span>
+          <span class="stack-tag">Self-hosting</span>
+          <span class="stack-tag">playit.gg</span>
+        </div>
+      </div>
+      <div class="project-year">2023&#8211;pr&#233;sent</div>
+    </div>
 
-                <!-- Web SaaS Card -->
-                <article class="card project-card">
-                    <h3>Projets Web SaaS</h3>
-                    <p>
-                        Conception de SPAs modulaires. Interfaces réactives avec des composants complexes (Flashcards 3D, éditeur de texte). Sécurisation stricte des données et déploiement automatisé.
-                    </p>
-                    <ul class="tech-stack">
-                        <li>React 19</li>
-                        <li>Next.js 14</li>
-                        <li>Vite 8</li>
-                        <li>Zod</li>
-                    </ul>
-                </article>
+    <div class="project-item reveal">
+      <div>
+        <div class="project-title">Game Modding &amp; Reverse Engineering</div>
+        <div class="project-desc">
+          Modification, correction de bugs et alt&#233;ration de code sur des jeux en Java (Minecraft),
+          C# (Darkest Dungeon) et Python &#8212; apprentissage autodidacte depuis 2018.
+        </div>
+        <div class="project-stack">
+          <span class="stack-tag">Java</span>
+          <span class="stack-tag">C#</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">D&#233;compilation</span>
+        </div>
+      </div>
+      <div class="project-year">2018&#8211;pr&#233;sent</div>
+    </div>
 
-                <!-- Infrastructure Home-Lab Card -->
-                <article class="card project-card">
-                    <h3>Infrastructure Home-Lab</h3>
-                    <p>
-                        Maintenance d'un serveur domestique optimisé gérant 18 conteneurs via Docker Compose et Ansible. Réseau sécurisé par VPN Mesh Tailscale et monitoring via Uptime Kuma.
-                    </p>
-                    <ul class="tech-stack">
-                        <li>Docker</li>
-                        <li>Ansible</li>
-                        <li>Tailscale</li>
-                        <li>Wiki.js</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
+    <div class="project-item reveal">
+      <div>
+        <div class="project-title">Coordination &#233;v&#233;nementielle / Magnus FDS</div>
+        <div class="project-desc">
+          Organisation et gestion de projets &#233;v&#233;nementiels au sein d'une association &#233;tudiante.
+          Planification, communication, logistique.
+        </div>
+        <div class="project-stack">
+          <span class="stack-tag">Gestion de projet</span>
+          <span class="stack-tag">Communication</span>
+          <span class="stack-tag">Travail d'&#233;quipe</span>
+        </div>
+      </div>
+      <div class="project-year">2021&#8211;2023</div>
+    </div>
 
-        <section id="skills" class="skills container reveal">
-            <h2 class="section-title text-center">Compétences Techniques</h2>
-            <div class="grid skills-grid">
-                <div class="card glass-panel">
-                    <h3>Langages & Développement</h3>
-                    <ul>
-                        <li>TypeScript (Strict) / JavaScript</li>
-                        <li>Python, Java, C#</li>
-                        <li>Qualité de code (ESLint 9)</li>
-                        <li>Scripting Bash (pro)</li>
-                    </ul>
-                </div>
-                <div class="card glass-panel">
-                    <h3>Frameworks & UI</h3>
-                    <ul>
-                        <li>React 19 & Next.js 14</li>
-                        <li>Vite 8 & Node.js</li>
-                        <li>Tailwind CSS</li>
-                        <li>Validation Zod</li>
-                    </ul>
-                </div>
-                <div class="card glass-panel">
-                    <h3>DevSecOps & Infra</h3>
-                    <ul>
-                        <li>GitLab CI / GitHub Actions</li>
-                        <li>Docker Compose & Ansible</li>
-                        <li>Windows Server (AD, GPO) / Linux</li>
-                        <li>Réseaux (TCP/IP, VPN Mesh Tailscale)</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+  </div>
+</section>
 
-        <section id="experience" class="experience container reveal">
-            <h2 class="section-title">Expériences & Formations</h2>
-            <div class="timeline">
-                <div class="timeline-item card glass-panel">
-                    <div class="timeline-date">2025 - 2026</div>
-                    <h3>Seconde année de Bachelor SN</h3>
-                    <h4>EPSI Toulouse</h4>
-                    <p>Création de programmes d'archivage en bash. Formation EBIOS.</p>
-                </div>
-                <div class="timeline-item card glass-panel">
-                    <div class="timeline-date">2024</div>
-                    <h3>Assistant Pédagogique (Support IT)</h3>
-                    <h4>CERTIFECO (Montpellier)</h4>
-                    <p>Support IT, gestion des plannings, archivage et communication.</p>
-                </div>
-                <div class="timeline-item card glass-panel">
-                    <div class="timeline-date">2020 - 2023</div>
-                    <h3>Intérimaire</h3>
-                    <h4>Banque Populaire du Sud</h4>
-                    <p>Accueil, opérations courantes, profilage et gestion des dossiers.</p>
-                </div>
-            </div>
-        </section>
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">03 &#8212; Parcours</div>
+  <h2 class="section-title">Exp&#233;rience &amp; Formation</h2>
+  <div class="xp-list">
 
-        <section id="contact" class="contact container reveal text-center">
-            <h2 class="section-title">Prêt à collaborer ?</h2>
-            <p>N'hésitez pas à me contacter pour toute opportunité ou projet.</p>
-            <div class="contact-links">
-                <a href="mailto:maxia.blot@gmail.com" class="btn btn-outline">maxia.blot@gmail.com</a>
-                <a href="tel:0621037301" class="btn btn-outline">06.21.03.73.01</a>
-                <a href="https://www.linkedin.com/in/math%C3%A9o-cluts-blot-0a0194321/" target="_blank" rel="noopener" class="btn btn-primary">LinkedIn</a>
-            </div>
-        </section>
-    </main>
+    <div class="xp-item reveal">
+      <div class="xp-date">2025&#8211;2026<br><span style="color:var(--accent3);font-size:.65rem">En cours</span></div>
+      <div>
+        <div class="xp-role">Bachelor Syst&#232;me &amp; R&#233;seau</div>
+        <div class="xp-company">EPSI Toulouse</div>
+        <ul class="xp-tasks">
+          <li>Programmes d'archivage Bash</li>
+          <li>Formation EBIOS (risk management)</li>
+          <li>Objectif : alternance Bachelor SN</li>
+        </ul>
+      </div>
+    </div>
 
-    <footer class="footer text-center">
-        <p>&copy; <span id="current-year"></span> Mathéo Cluts-Blot. Tous droits réservés.</p>
-    </footer>
+    <div class="xp-item reveal">
+      <div class="xp-date">2024</div>
+      <div>
+        <div class="xp-role">Assistant P&#233;dagogique</div>
+        <div class="xp-company">Certifeco &#8212; Montpellier (34)</div>
+        <ul class="xp-tasks">
+          <li>Support IT interne</li>
+          <li>Gestion des plannings de formations</li>
+          <li>Communication &amp; archivage des dossiers scolaires</li>
+        </ul>
+      </div>
+    </div>
 
-    <script src="assets/js/main.js"></script>
+    <div class="xp-item reveal">
+      <div class="xp-date">2020, 2021<br>&amp; 2023</div>
+      <div>
+        <div class="xp-role">Int&#233;rimaire</div>
+        <div class="xp-company">Banque Populaire du Sud &#8212; Am&#233;lie-les-Bains (66)</div>
+        <ul class="xp-tasks">
+          <li>Accueil clients &amp; gestion des op&#233;rations courantes</li>
+          <li>Profilage et d&#233;marchage commercial</li>
+          <li>Contr&#244;le et mise &#224; jour des dossiers clients</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="xp-item reveal">
+      <div class="xp-date">2021&#8211;2024</div>
+      <div>
+        <div class="xp-role">Licence 2 Biologie &amp; M&#233;canismes du Vivant</div>
+        <div class="xp-company">Universit&#233; de Montpellier</div>
+        <ul class="xp-tasks">
+          <li>Reconversion vers l'informatique en parall&#232;le</li>
+          <li>Certification PIX (2022)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center">04 &#8212; Contact</div>
+  <h2 class="section-title" style="text-align:center">Travaillons ensemble</h2>
+  <p style="color:var(--muted);font-size:.85rem;max-width:480px;margin:0 auto;line-height:1.8">
+    Je recherche une alternance dans le domaine Syst&#232;me &amp; R&#233;seau ou D&#233;veloppement &#8212; bas&#233; &#224; Toulouse, v&#233;hicul&#233; et mobile sur le secteur toulousain.
+  </p>
+  <form class="contact-form reveal" action="https://formsubmit.co/maxia.blot@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="Nouveau message depuis ton GitHub Pages">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="_honey" style="display:none">
+    <div class="contact-field">
+      <label for="contact-name">Nom</label>
+      <input id="contact-name" name="name" type="text" required>
+    </div>
+    <div class="contact-field">
+      <label for="contact-email">Email</label>
+      <input id="contact-email" name="email" type="email" required>
+    </div>
+    <div class="contact-field full">
+      <label for="contact-message">Message</label>
+      <textarea id="contact-message" name="message" required></textarea>
+    </div>
+    <div class="contact-note">Le message sera transmis directement par email.</div>
+    <div class="contact-submit">
+      <button type="submit">Envoyer le message</button>
+    </div>
+  </form>
+  <div class="contact-links">
+    <a class="contact-link" href="mailto:maxia.blot@gmail.com">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      maxia.blot@gmail.com
+    </a>
+    <a class="contact-link" href="tel:0621037301">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.7 13.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.61 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.6a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      06.21.03.73.01
+    </a>
+    <a class="contact-link" href="https://linkedin.com/in/math%C3%A9o-cluts-blot-0a0194321/?skipRedirect=true" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <a class="contact-link" href="https://github.com/SerMaxia" target="_blank" rel="noopener">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>Math&#233;o Cluts-Blot &#169; 2026</span>
+  <span>Toulouse, France / Permis B</span>
+</footer>
+
+<script>
+/* -- CURSOR -- */
+const cur=document.getElementById('cursor');
+const ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx-6+'px';cur.style.top=my-6+'px';
+});
+(function lerp(){
+  rx+=(mx-rx)*.14;ry+=(my-ry)*.14;
+  ring.style.left=rx-18+'px';ring.style.top=ry-18+'px';
+  requestAnimationFrame(lerp);
+})();
+document.querySelectorAll('a,button,input,textarea,.skill-card,.project-item,.xp-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    ring.style.width='60px';ring.style.height='60px';
+    ring.style.left=rx-30+'px';ring.style.top=ry-30+'px';
+  });
+  el.addEventListener('mouseleave',()=>{
+    ring.style.width='36px';ring.style.height='36px';
+  });
+});
+
+/* -- PARTICLE NETWORK BG -- */
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+
+class Particle{
+  constructor(){this.reset()}
+  reset(){
+    this.x=Math.random()*W;this.y=Math.random()*H;
+    this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;
+    this.r=Math.random()*1.5+.5;this.alpha=Math.random()*.5+.1;
+  }
+  update(){
+    const dx=this.x-mouseX,dy=this.y-mouseY;
+    const d=Math.sqrt(dx*dx+dy*dy);
+    const repulse=120;
+    if(d<repulse&&d>0){
+      const force=(repulse-d)/repulse;
+      this.vx+=dx/d*force*1.2;
+      this.vy+=dy/d*force*1.2;
+    }
+    this.vx*=.94;this.vy*=.94;
+    const spd=Math.sqrt(this.vx*this.vx+this.vy*this.vy);
+    if(spd<.15&&spd>0){this.vx=this.vx/spd*.15;this.vy=this.vy/spd*.15;}
+    this.x+=this.vx;this.y+=this.vy;
+    if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
+  }
+  draw(){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,212,255,${this.alpha})`;ctx.fill();
+  }
+}
+for(let i=0;i<110;i++)particles.push(new Particle());
+
+let mouseX=W/2,mouseY=H/2;
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});
+
+function drawLines(){
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<120){
+        const a=(1-d/120)*0.18;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle=`rgba(0,212,255,${a})`;
+        ctx.lineWidth=.6;ctx.stroke();
+      }
+    }
+    const ddx=particles[i].x-mouseX;
+    const ddy=particles[i].y-mouseY;
+    const dd=Math.sqrt(ddx*ddx+ddy*ddy);
+    if(dd<160){
+      const a=(1-dd/160)*0.35;
+      ctx.beginPath();
+      ctx.moveTo(particles[i].x,particles[i].y);
+      ctx.lineTo(mouseX,mouseY);
+      ctx.strokeStyle=`rgba(255,45,107,${a})`;
+      ctx.lineWidth=.8;ctx.stroke();
+    }
+  }
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p=>{p.update();p.draw()});
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* -- 3D TILT ON SKILL CARDS -- */
+document.querySelectorAll('.skill-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const rect=card.getBoundingClientRect();
+    const x=(e.clientX-rect.left)/rect.width-.5;
+    const y=(e.clientY-rect.top)/rect.height-.5;
+    card.style.transform=`rotateY(${x*14}deg) rotateX(${-y*14}deg) scale(1.02)`;
+    card.style.setProperty('--mx',(e.clientX-rect.left)/rect.width*100+'%');
+    card.style.setProperty('--my',(e.clientY-rect.top)/rect.height*100+'%');
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='rotateY(0) rotateX(0) scale(1)';
+    card.style.transition='transform .5s cubic-bezier(.23,1,.32,1)';
+  });
+});
+
+/* -- SCROLL REVEAL -- */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+/* -- STAGGER SKILL CARDS -- */
+document.querySelectorAll('.skill-card').forEach((c,i)=>{
+  c.style.transitionDelay=i*.07+'s';
+});
+
+/* -- STICKY ON SCROLL -- */
+const sticky=document.getElementById('sticky');
+function updateStickyVisibility(){
+  if(!sticky)return;
+  const show=window.scrollY>20;
+  sticky.classList.toggle('is-visible',show);
+  sticky.classList.toggle('is-hidden',!show);
+}
+window.addEventListener('scroll',updateStickyVisibility,{passive:true});
+updateStickyVisibility();
+
+/* -- SMASH TRANSITION LOGIC -- */
+const partyRockLink = document.querySelector('a[href="https://SerMaxia.github.io/Party_Rock"]');
+const smashOverlay = document.getElementById('smash-overlay');
+
+if (partyRockLink && smashOverlay) {
+  partyRockLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const href = partyRockLink.getAttribute('href');
+    
+    smashOverlay.classList.add('is-smashing');
+    
+    setTimeout(() => {
+      smashOverlay.classList.add('is-shattered');
+      document.body.classList.add('is-shaking');
+      document.getElementById('smash-rock').style.display = 'none';
+      
+      setTimeout(() => {
+        smashOverlay.classList.add('is-blackout');
+        setTimeout(() => { window.location.href = href; }, 400);
+      }, 600);
+    }, 400);
+  });
+}
+</script>
+
+<!-- SMASH TRANSITION OVERLAY -->
+<div id="smash-overlay">
+  <div id="smash-rock"></div>
+  <div id="smash-glass"></div>
+  <div id="smash-blackout"></div>
+</div>
+
 </body>
 </html>
